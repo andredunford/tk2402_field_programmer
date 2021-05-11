@@ -3,7 +3,7 @@
 ## Introduction
 This software was developed to program the settings and channel memory of a Kenwood 2402 VHF radio via serial protocol. A local web interfcae is provided, along with a PostgreSQL database of channel frequencies and paramters.
 
-<img src="tk2402_screenshot.png" width="260">
+<img src="tk2402_screenshot.png" width="420">
 
 The original intention was to have a portable VHF programmer running on a _raspberry pi_, with access to the web interface via phone/lapblet/laptop. However, it can can be run direcly on any any system with the requirements indicated within this document.
 
