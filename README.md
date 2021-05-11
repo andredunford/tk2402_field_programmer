@@ -22,7 +22,7 @@ The original intention was to have a portable programmer running on a _raspberry
 Clone the repository and install all python package requirements listed in *requirements.txt*.  It is recommended that a new Python virtual environment is created for this purpose.
 ### Database Setup
 Install PostreSQL and create a database with the structure provided in "pg_dump.sql".  This dump file can be reconstituted with the pg_restore command provided with PostgreSQL.
-The database should be named "kenwood' with default username "postgres" and password "postgres" for this example.  These credentials can be changed within [kenwood_interface.py](kenwood_interface.py).
+The database should be named "kenwood' with default username "postgres" and password "postgres" for this example.  These credentials can be changed within [kenwood_interface.py](kenwood_interface.py#L14).
 
 ## Launch
 Simply run the script *kenwood_interface.py* which will start a Flask development server on your host computer at 0.0.0.0 port: 5050.
