@@ -5,17 +5,17 @@ This software was developed to field program the Kenwood 2402 VHF radio via seri
 
 <img src="tk2402_screenshot.png" width="500">
 
-The original intention was to have a portable VHF programmer running on a _raspberry pi_, with access to the web interface via phone/lapblet/laptop. However, it can can be run direcly on any any system with the requirements indicated within this document.
+The original intention was to have a portable VHF field programmer running on a _raspberry pi_, with access to the web interface via phone/lapblet/laptop. However, it can can be run direcly on any any system with the requirements indicated within this document.
 
 ## Disclaimer
 *tk2402_radio_programmer* directly overwrites the contents of the TK2402's integrated EEPROM. **This software is strictly for educational and research purposes, and has the potential to render your radio unusable and void any warranty.** I assume no responsibility or liability for any damages or loss of use to property. Use this software at your own risk. This software may not be used for any commercial application. 
 
 ## Hardware Requirements
-- Kenwood TK 2402 (I suspect this may work with other 2400 / 3400 series handheld radios, but has not been tested on any other model).  **Please see Disclaimer**.
+- Kenwood TK 2402 (I suspect this may work with other 2400 / 3400 series handheld radios, but has not been tested on any other model by the developer).  **Please see Disclaimer**.
 - Prolific USB-to-Serial cable with appropriate Kenwood-style two-pin connector.
 
 ## Technologies / Frameworks
-- Python 3
+- Python 3.6
 - Flask
 - Javascript
 - PostgreSQL 9
