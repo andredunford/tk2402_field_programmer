@@ -3,6 +3,8 @@
 ## Introduction
 This software was developed to program the settings and channel memory of a Kenwood 2402 VHF radio via serial protocol. A local web interfcae is provided, along with a PostgreSQL database of channel frequencies and paramters.
 
+
+
 The original intention was to have a portable VHF programmer running on a _raspberry pi_, with access to the web interface via phone/lapblet/laptop. However, it can can be run direcly on any any system with the requirements indicated within this document.
 
 ## Disclaimer
@@ -25,9 +27,6 @@ Install PostreSQL and create a database with the structure provided in [pg_dump.
 The database should be named "kenwood" with default username "postgres" and password "postgres" for this example.  If you use custom credentials, the connection properties can be changed in [kenwood_interface.py](kenwood_interface.py#L14).
 
 ## Launch
-To luanch the application, simply run the script *kenwood_interface.py*. This will start a Flask development server on your host computer at 0.0.0.0 port: 5050.
+To luanch the application, simply run the script [kenwood_interface.py](kenwood_interface.py). This will start a Flask development server on your host computer at 0.0.0.0 port: 5050.
 Navigate to the host address and port from any browser with network access to the server.
 > <server hostname/IP>:5050
-
-
-
