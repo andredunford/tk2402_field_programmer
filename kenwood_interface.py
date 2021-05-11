@@ -16,7 +16,6 @@ pgconn = pg.connect(host='localhost', dbname='kenwood', user='postgres', passwor
 
 def get_chan_ids():
     chan_df = pd.read_sql_query("SELECT * FROM tk_channels ORDER BY CASE WHEN channel_id = 'None' THEN 1 ELSE 2 END, channel_id, freq_rx", con=pgconn, index_col='channel_id')
-    # chan_df.index += 1  # force index to start from 1
     channel_ids = chan_df.index.to_list()
 
     return channel_ids, chan_df
