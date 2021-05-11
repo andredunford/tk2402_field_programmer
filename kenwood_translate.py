@@ -12,7 +12,6 @@ class TKTranslate(object):
     def dict_to_binary(self, channels_dict):
         """translate dictionary of channel parameters into hex data formatted for Kenwood Radio"""
 
-
         channels_binary = np.zeros((16, 32), dtype='uint8')
         channels_binary.fill(0xff)
         channels_active = []
@@ -74,7 +73,7 @@ class TKTranslate(object):
         return data_dict
 
     def calc_freq_step(self, freq):
-        """find frequency step flag by mysterious method
+        """find frequency step flag by mysterious kenwood method
         TODO: still can't reproduce higher precision frequencies with 100% accuracy (rare) """
 
         #  take 5 significant digits after decimal place as integer
@@ -160,7 +159,6 @@ class TKTranslate(object):
         width = int((psw_hex & 0x0f) - 0xC)
 
         return power, scan, width
-
 
     def list_active_channels(self, channels_binary):
 
