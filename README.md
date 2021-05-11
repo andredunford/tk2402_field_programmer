@@ -21,7 +21,7 @@ The intention was to have a portable VHF field programmer running on a _raspberr
 - PostgreSQL 9
 
 ## Installation
-Clone the repository and install all python package requirements listed in *requirements.txt*.  It is recommended that a new Python virtual environment is created for this purpose.
+Clone the repository and install all python package requirements listed in [requirements.txt](requirements.txt).  It is recommended that a new Python virtual environment is created for this purpose.
 #### Database Setup
 Install PostgreSQL and create a database with the structure provided in [pg_dump.sql](pg_dump.sql).  This dump file can be reconstituted with the pg_restore command provided with PostgreSQL.
 As structured, the database should be named "kenwood" with default username "postgres" and password "postgres".  If you wish to use custom credentials, the connection properties can be changed in [kenwood_interface.py](kenwood_interface.py#L14).
