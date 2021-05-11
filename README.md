@@ -1,7 +1,7 @@
 # tk2402_radio_programmer
 
 ## Introduction
-This software was developed to program the settings and channel memory of a Kenwood 2402 VHF radio via serial protocol. A local web interfcae is provided, along with a PostgreSQL database of channel frequencies and paramters.
+This software was developed to field program the Kenwood 2402 VHF radio via serial protocol. A local web interfcae is provided, along with a PostgreSQL database of user-supplied channel frequencies and paramters.
 
 <img src="tk2402_screenshot.png" width="500">
 
