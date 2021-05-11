@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kenwood Interface</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='radios.css') }}">
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <script>
+        function displayDict() {
+<!--        display channel data in data_dict       -->
+
+        var data = JSON.parse({{data_dict|tojson}});
+        var channel;
+
+        var i;
+        for (var chan_num = 1; chan_num <= 16; chan_num++) {
+
+            channel = data[chan_num];
+
+            console.log(chan_num)
+            console.log('channel', channel)
+
+            document.getElementById(`freq_rx${chan_num}`).value = !channel["freq_rx"] ? "" : channel["freq_rx"].toFixed(5);
+            document.getElementById(`freq_tx${chan_num}`).value = !channel["freq_tx"] ? "" : channel["freq_tx"].toFixed(5);
+
+            document.getElementById(`qt_rx${chan_num}`).value = channel["qt_rx"].toFixed(1);  // need toFixed() for javascript weirdness
+            document.getElementById(`qt_tx${chan_num}`).value = channel["qt_tx"].toFixed(1);  // need toFixed() for javascript weirdness
+
+            document.getElementById(`pow_high${chan_num}`).checked = channel["power"];
+            document.getElementById(`pow_low${chan_num}`).checked = !channel["power"];
+
+            document.getElementById(`scan_yes${chan_num}`).checked = channel["scan"];
+            document.getElementById(`scan_no${chan_num}`).checked = !channel["scan"];
+
+            document.getElementById(`ch_wide${chan_num}`).checked = channel["width"];
+            document.getElementById(`ch_narrow${chan_num}`).checked = !channel["width"];
+
+            document.getElementById(`channel_id${chan_num}`).value = !channel["channel_id"] ? "None" : channel["channel_id"];
+
+        }
+
+    }
+    </script>
+
+</head>
+<body onload="displayDict()">
+<div class="main_div">
+
+    <script>
+        function displaySelect(chan_num) {
+
+        var data = JSON.parse({{chan_db|tojson}});
+
+        var channel_id = document.getElementById(`channel_id${chan_num}`).value;
+
+        var channel = data[channel_id];
+
+        console.log("db", data);
+        console.log("chan_num:", chan_num);
+        console.log("channel:", channel);
+
+        document.getElementById(`freq_rx${chan_num}`).value = !channel["freq_rx"] ? "" : channel["freq_rx"].toFixed(5);
+        document.getElementById(`freq_tx${chan_num}`).value = !channel["freq_tx"] ? "" : channel["freq_tx"].toFixed(5);
+
+        document.getElementById(`qt_rx${chan_num}`).value = channel["qt_rx"].toFixed(1);  // need toFixed() for javascript weirdness
+        document.getElementById(`qt_tx${chan_num}`).value = channel["qt_tx"].toFixed(1);  // need toFixed() for javascript weirdness
+
+        document.getElementById(`pow_high${chan_num}`).checked = channel["power"];
+        document.getElementById(`pow_low${chan_num}`).checked = !channel["power"];
+
+        document.getElementById(`scan_yes${chan_num}`).checked = channel["scan"];
+        document.getElementById(`scan_no${chan_num}`).checked = !channel["scan"];
+
+        document.getElementById(`ch_wide${chan_num}`).checked = channel["width"];
+        document.getElementById(`ch_narrow${chan_num}`).checked = !channel["width"];
+    }
+    </script>
+
+    <script>
+    function clickHandler(radio){
+        console.log(radio);
+        console.log("id:", radio.id);
+        console.log("name:", radio.name);
+        console.log("checked:", radio.checked);
+        console.log("value:", radio.value);
+
+<!--        document.getElementById(radio.id).checked = true;-->
+<!--        document.getElementById(radio.id).value = radio.value;-->
+
+<!--        let checked = document.querySelector(`input[name="${radio.name}"]:checked`);-->
+<!--        console.log("checked:", checked)-->
+    }
+    </script>
+
+    <!--    RADIO TOOLS     -->
+
+    <div class="cell_div" >
+
+        <form action="/read_channels" method="post">
+            <div class="head_div">
+                <img src="{{url_for('static', filename='radio_icon.svg')}}" width="40px" height="40px" class="icon">
+                <input type="submit" value="READ" class="button_right">
+                <p>TRANSCEIVER INTERFACE</p>
+            </div>
+
+        </form>
+        <div class="head_div">
+            <form name="channel_data" action="/send_channels" method="post">
+                {% for i in range(1, 17) %}
+                <label >{{'{}'.format(i).rjust(2, '0')}}:
+                    <select class="id_select" name="channel_id{{i}}"  id="channel_id{{i}}" onchange="displaySelect({{i}})">
+                        {% for chan in channel_ids %}
+                        <option value="{{chan}}">{{chan}}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <input class="in_number" id="freq_rx{{i}}"  name="freq_rx{{i}}" type="number" min="130" max="174" step="0.00001" placeholder="RX">
+                <input class="in_number" id="freq_tx{{i}}" name="freq_tx{{i}}" type="number" min="130" max="174" step="0.00001" placeholder="TX">
+
+                <select class="qt_select" id="qt_rx{{i}}" name="qt_rx{{i}}">
+                    {% for qt_freq in qt_freqs %}
+                    <option value="{{qt_freq}}">{{qt_freq}}</option>
+                    {% endfor %}
+                </select>
+
+                <select class="qt_select" id="qt_tx{{i}}" name="qt_tx{{i}}" >
+                    {% for qt_freq in qt_freqs %}
+                    <option value="{{qt_freq}}">{{qt_freq}}</option>
+                    {% endfor %}
+                </select>
+
+                <div class="radio-toolbar">
+                    <input id="pow_high{{i}}" name="power{{i}}" type="radio" value=1 checked="checked">
+                    <label for="pow_high{{i}}">HI</label>
+
+                    <input id="pow_low{{i}}"  name="power{{i}}" type="radio" value=0>
+                    <label for="pow_low{{i}}">LO</label>
+                </div>
+
+                <div class="radio-toolbar">
+
+                    <input id="scan_yes{{i}}" name="scan{{i}}" type="radio" value=1 checked="checked">
+                    <label class="radio-toolbar" for="scan_yes{{i}}">SN</label>
+
+                    <input id="scan_no{{i}}" name="scan{{i}}" type="radio" value=0>
+                    <label class="radio-toolbar" for="scan_no{{i}}">-/-</label>
+                </div>
+
+                <div class="radio-toolbar">
+
+                    <input id="ch_wide{{i}}" name=width{{i}} type="radio" value=1>
+                    <label for="ch_wide{{i}}">WD</label>
+
+                    <input id="ch_narrow{{i}}" name="width{{i}}" type="radio" value=0 checked="checked">
+                    <label for="ch_narrow{{i}}">NR</label>
+                </div>
+
+                <br>
+                {% endfor %}
+                <br>
+                <input type="submit" value="WRITE"  class="button_right">
+                <br>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+    <script>
+    function insertTX(rx_value){
+        console.log(rx_value);
+        if (!document.getElementById("freq_tx").value ){
+            document.getElementById("freq_tx").value = rx_value;
+        }
+
+    }
+    </script>
+    <script>
+    function insertQT(qt_rx_value){
+        console.log(qt_rx_value);
+        if (!document.getElementById("qt_tx").value || document.getElementById("qt_tx").value == 0.0){
+            document.getElementById("qt_tx").value = qt_rx_value
+        }
+    }
+    </script>
+
+    <!--  DATABASE TOOLS   -->
+    <div class="cell_div">
+        <form name="add_channel" action="/add_channel" method="POST">
+            <div class="head_div">
+                <img class="icon" src="{{url_for('static', filename='database_icon.png')}}" width="30px" height="30px">
+                <input type="submit" value="ADD" class="button_right">
+                <p>ADD CHANNEL TO DATABASE</p>
+            </div>
+
+
+
+            <label>DESC:
+                <input class="in_desc" name="description" type="text">
+            </label>
+            <div class="head_div">
+                <label>ID
+                    <input class="in_text" name="channel_id" type="text" required>
+                </label>
+                <input class="in_number" name="freq_rx" type="number" min="136" max="174" step="0.00001" placeholder="RX" onchange="insertTX(value)" required>
+
+                <input id="freq_tx" class="in_number" name="freq_tx" type="number" min="136" max="174" step="0.00001" placeholder="TX">
+
+                <select class="qt_select" name="qt_rx" onchange="insertQT(value)">
+                    {% for qt_freq in qt_freqs %}
+                    <option value="{{qt_freq}}">{{qt_freq}}</option>
+                    {% endfor %}
+                </select>
+
+                <select id="qt_tx" class="qt_select" name="qt_tx">
+                    {% for qt_freq in qt_freqs %}
+                    <option value="{{qt_freq}}">{{qt_freq}}</option>
+                    {% endfor %}
+                </select>
+
+                <div class="radio-toolbar">
+
+                    <input id="high" name="power" type="radio" value=1 checked="checked">
+                    <label for="high">HI</label>
+
+                    <input id="low" name="power" type="radio" value=0>
+                    <label for="low">LO</label>
+                </div>
+                <div class="radio-toolbar">
+
+                    <input id="scan_yes" name="scan" type="radio" value=1 checked="checked">
+                    <label for="scan_yes">SN</label>
+
+                    <input id="scan_no" name="scan" type="radio" value=0>
+                    <label for="scan_no">-/-</label>
+                </div>
+                <div class="radio-toolbar">
+
+                    <input id="ch_wide" name="width" type="radio" value=1>
+                    <label for="ch_wide">WD</label>
+
+                    <input id="ch_narrow" name="width" type="radio" value=0 checked="checked">
+                    <label for="ch_narrow">NR</label>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <hr>
+    <div class="cell_div">
+        <form action="/delete_channel" method="POST">
+            <div class="head_div">
+                <input type="submit" value="DELETE" class="button_right">
+                <p>DELETE CHANNEL FROM DATABASE</p>
+            </div>
+            <label>ID:
+                <select class="id_select" name="to_delete">
+                    {% for chan in channel_ids %}
+                    <option value="{{chan}}">{{chan}}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
