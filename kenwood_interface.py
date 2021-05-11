@@ -11,7 +11,7 @@ from kenwood_comms import KenwoodInterface
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-pgconn = pg.connect(host='raspi.local', dbname='kenwood', user='postgres', password='postgres')
+pgconn = pg.connect(host='localhost', dbname='kenwood', user='postgres', password='postgres')
 
 
 def get_chan_ids():
