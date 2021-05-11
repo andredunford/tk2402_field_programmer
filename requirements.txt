@@ -1,0 +1,17 @@
+click==7.1.2
+Flask==1.1.2
+future==0.18.2
+iso8601==0.1.14
+itsdangerous==1.1.0
+Jinja2==2.11.3
+MarkupSafe==1.1.1
+numpy==1.18.5
+pandas==0.25.3
+pkg-resources==0.0.0
+psycopg2==2.8.6
+pyserial==3.5
+python-dateutil==2.8.1
+pytz==2021.1
+PyYAML==5.3.1
+six==1.16.0
+Werkzeug==1.0.1
