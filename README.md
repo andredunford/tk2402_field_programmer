@@ -22,7 +22,7 @@ The original intention was to have a portable VHF field programmer running on a 
 
 ## Installation
 Clone the repository and install all python package requirements listed in *requirements.txt*.  It is recommended that a new Python virtual environment is created for this purpose.
-### Database Setup
+##### Database Setup
 Install PostreSQL and create a database with the structure provided in [pg_dump.sql](pg_dump.sql).  This dump file can be reconstituted with the pg_restore command provided with PostgreSQL.
 The database should be named "kenwood" with default username "postgres" and password "postgres" for this example.  If you use custom credentials, the connection properties can be changed in [kenwood_interface.py](kenwood_interface.py#L14).
 
