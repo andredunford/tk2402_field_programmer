@@ -27,6 +27,6 @@ Install PostgreSQL and create a database with the structure provided in [pg_dump
 As structured, the database should be named "kenwood" with default username "postgres" and password "postgres".  If you wish to use custom credentials, the connection properties can be changed in [kenwood_interface.py](kenwood_interface.py#L14).
 
 ## Launch
-To launch the application, simply run the script [kenwood_interface.py](kenwood_interface.py). This will start a Flask development server on your host computer at 0.0.0.0 port: 5050.
+To launch the application, run the script [kenwood_interface.py](kenwood_interface.py). This will start a Flask development server on your host computer at 0.0.0.0 port: 5050.
 Navigate to the host address and port from any browser with network access to the server.
 > <yourhostname/IP>:5050
