@@ -29,4 +29,4 @@ As structured, the database should be named "kenwood" with default username "pos
 ## Launch
 To luanch the application, simply run the script [kenwood_interface.py](kenwood_interface.py). This will start a Flask development server on your host computer at 0.0.0.0 port: 5050.
 Navigate to the host address and port from any browser with network access to the server.
-> <your host name>:5050
+> <yourhostname/IP>:5050
