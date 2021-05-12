@@ -34,4 +34,4 @@ To launch the application, run the script [kenwood_interface.py](kenwood_interfa
 `python3 kenwood_interface.py`  
 
 Navigate to the host address and port from any browser with network access to the server.
-> <yourhostname/IP>:5050
+> http://<yourhostname/IP>:5050
