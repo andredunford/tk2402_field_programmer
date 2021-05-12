@@ -1,7 +1,7 @@
 # tk2402_radio_programmer
 
 ## Introduction
-This software was developed for field programming of the Kenwood 2402 VHF radio via serial protocol. The software handles all handshaking, encryption, and data formatting between the host computer and the transceiver. A local web user interface is provided, along with a PostgreSQL database of user-supplied channel frequencies and paramters.
+This software was developed as a custom field programmer for the Kenwood 2402 VHF radio. The software handles all handshaking, encryption, data formatting, EEPROM memory management, and serial communications between the host computer and the transceiver. A local web user interface is provided, along with a PostgreSQL database of user-supplied channel frequencies and paramters.
 
 ![UI screenshot](tk2402_screenshot.png)
 
