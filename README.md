@@ -13,7 +13,7 @@ The intention was to have a portable VHF field programmer running on a _raspberr
 *tk2402_radio_programmer* directly overwrites the contents of the TK2402's integrated EEPROM.  I assume no responsibility or liability for any damages or loss of use to property. Use this software at your own risk. This software may not be used for any commercial application. 
 
 ## Hardware Requirements
-- Kenwood TK 2402 (I suspect this may work with other 2400 / 3400 series handheld radios, but has not been tested on any other model by the developer).  **Please see Disclaimer**.
+- Kenwood TK 2402 VHF transceiver (I suspect this may work with other 2400 / 3400 series handheld radios, but has not been tested on any other model by the developer).  **Please see Disclaimer**.
 - Prolific USB-to-Serial cable with appropriate Kenwood-style two-pin connector.
 
 ![TK2402 Hardware](tk2402_hardware.jpg)
