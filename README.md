@@ -14,6 +14,8 @@ The intention was to have a portable VHF field programmer running on a _raspberr
 - Kenwood TK 2402 (I suspect this may work with other 2400 / 3400 series handheld radios, but has not been tested on any other model by the developer).  **Please see Disclaimer**.
 - Prolific USB-to-Serial cable with appropriate Kenwood-style two-pin connector.
 
+![TK2402 Hardware](tk2402_hardware.jpg)
+
 ## Technologies / Frameworks
 - Python 3.x
 - Flask
