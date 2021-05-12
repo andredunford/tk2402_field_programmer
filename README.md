@@ -8,7 +8,8 @@
 The intention was to have a portable VHF field programmer running on a _raspberry pi_, with access to the web interface via phone / tablet / laptop. However, this software can be run direcly on any system with the requirements indicated in this document.
 
 ## Disclaimer
-*tk2402_radio_programmer* directly overwrites the contents of the TK2402's integrated EEPROM. **This software is strictly for educational and research purposes, and has the potential to render your radio unusable and void any warranty.** I assume no responsibility or liability for any damages or loss of use to property. Use this software at your own risk. This software may not be used for any commercial application. 
+**This software is strictly for educational and research purposes, and has the potential to render your radio unusable and void any warranty.**  
+*tk2402_radio_programmer* directly overwrites the contents of the TK2402's integrated EEPROM.  I assume no responsibility or liability for any damages or loss of use to property. Use this software at your own risk. This software may not be used for any commercial application. 
 
 ## Hardware Requirements
 - Kenwood TK 2402 (I suspect this may work with other 2400 / 3400 series handheld radios, but has not been tested on any other model by the developer).  **Please see Disclaimer**.
