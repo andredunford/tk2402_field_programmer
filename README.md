@@ -9,6 +9,7 @@ The intention was to have a portable VHF field programmer running on a _raspberr
 
 ## Disclaimer
 **This software is strictly for educational and research purposes, and has the potential to render your radio unusable and void any warranty.**  
+
 *tk2402_radio_programmer* directly overwrites the contents of the TK2402's integrated EEPROM.  I assume no responsibility or liability for any damages or loss of use to property. Use this software at your own risk. This software may not be used for any commercial application. 
 
 ## Hardware Requirements
