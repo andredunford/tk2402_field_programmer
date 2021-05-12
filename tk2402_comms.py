@@ -1,6 +1,6 @@
 import serial
 from serial.tools import list_ports
-from kenwood_constants import *
+from tk2402_constants import *
 import time
 import numpy as np
 

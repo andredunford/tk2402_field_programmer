@@ -1,6 +1,6 @@
 import numpy as np
 
-from kenwood_constants import *
+from tk2402_constants import *
 
 
 class TKTranslate(object):

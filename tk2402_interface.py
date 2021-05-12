@@ -5,8 +5,8 @@ import pandas as pd
 
 from flask import Flask, render_template, request, redirect, jsonify, sessions, make_response
 
-from kenwood_translate import TKTranslate
-from kenwood_comms import KenwoodInterface
+from tk2402_translate import TKTranslate
+from tk2402_comms import KenwoodInterface
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
