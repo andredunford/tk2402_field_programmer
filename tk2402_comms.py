@@ -157,17 +157,14 @@ class KenwoodInterface(object):
 
     def chan_enum(self, channels):
         """form bit register representation of active channels
-        e.g. channels[1,2,4,7] = 0b01001011"""
+        e.g. channels[1,2,4,7] = 0b01001011
+        TODO: verify expected behaviour- seems to be inverse of above description, ie. 0b10110100"""
 
         chanEnum = np.array([0xff, 0xff], dtype='uint8')  # Channel enumeration bytes for #1-8, and #9-16
 
         for channel in channels:
-            if channel < 9:
-                # enumerate channels #1-8
-                chanEnum[0] = chanEnum[0] - (1 << (channel - 1))
-            else:
-                # enumerate channels #9-16
-                chanEnum[1] = chanEnum[1] - (1 << (channel - 9))
+            [ind, base] = [0, 1] if channel < 9 else [1, 9]
+            chanEnum[ind] -= (1 << (channel - base))
 
         #   send enumeration bytes
         self.ref_add_send(Y, 0x10, 0x00, 0x02)
