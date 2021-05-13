@@ -25,7 +25,7 @@ The intention was to have a portable VHF field programmer running on a _raspberr
 - PostgreSQL 9.x
 
 ## Installation
-Clone the repository and install all python package requirements listed in [requirements.txt](requirements.txt).  It is recommended that a new Python virtual environment is created for this purpose. On a Linux machine, these requirements can be installed with the following command:  
+Clone the repository and ensure that all python packages listed in [requirements.txt](requirements.txt) are installed.  It is recommended that a new Python virtual environment is created for this purpose. On a Linux machine, these requirements can be installed with the following command:  
 `pip install -r requirements.txt`
 #### Database Setup
 Install PostgreSQL and create a database with the structure provided in [pg_dump.sql](pg_dump.sql).  This dump file can be reconstituted with the pg_restore command provided with PostgreSQL.
