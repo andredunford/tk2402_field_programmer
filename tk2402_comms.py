@@ -5,7 +5,7 @@ import time
 import numpy as np
 
 
-class KenwoodInterface(object):
+class TKComms(object):
 
     def __init__(self):
 
@@ -236,5 +236,5 @@ class KenwoodInterface(object):
 
 
 if __name__ == '__main__':
-    tk = KenwoodInterface()
+    tk = TKComms()
     tk.tk_read_all()

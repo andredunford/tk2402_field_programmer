@@ -6,7 +6,7 @@ import pandas as pd
 from flask import Flask, render_template, request, redirect, jsonify, sessions, make_response
 
 from tk2402_translate import TKTranslate
-from tk2402_comms import KenwoodInterface
+from tk2402_comms import TKComms
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -83,7 +83,7 @@ def send_channels():
     trans = TKTranslate()
     channels_binary, channels_active = trans.dict_to_binary(data_dict)
 
-    ki = KenwoodInterface()
+    ki = TKComms()
 
     ki.tk_write(channels_active, channels_binary)
 
@@ -101,7 +101,7 @@ def read_channels():
     qt_freqs = get_qt_freqs()
 
     form_data = request.form
-    ki = KenwoodInterface()
+    ki = TKComms()
 
     data_in = ki.tk_read()
     trans = TKTranslate()
