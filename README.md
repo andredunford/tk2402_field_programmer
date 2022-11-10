@@ -37,7 +37,7 @@ To launch the application, run the script [kenwood_interface.py](kenwood_interfa
 
 Navigate to the host address and port from any browser with network access to the server.
 From a browser on the server running the application, the address would be:  
-`http://localhost:5050`
+`http://localhost:5050`  or  `http://127.0.0.1:5050`
 
-From another computer in the same local network, that address would look like:  
+From another computer in the same local network, that address would have the format:  
 `http://<yourhostname>:5050` 
