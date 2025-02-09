@@ -1,31 +1,26 @@
 import numpy as np
 import json
-import psycopg2 as pg
 import pandas as pd
+import sqlite3
 
-from flask import Flask, render_template, request, redirect, jsonify, sessions, make_response
+from flask import Flask, render_template, request, redirect
 
 from tk2402_translate import TKTranslate
 from tk2402_comms import TKComms
+import tk2402_constants as tkconst
+
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-pgconn = pg.connect(host='localhost', dbname='kenwood', user='postgres', password='postgres')
-
 
 def get_chan_ids():
-    chan_df = pd.read_sql_query("SELECT * FROM tk_channels ORDER BY CASE WHEN channel_id = 'None' THEN 1 ELSE 2 END, channel_id, freq_rx", con=pgconn, index_col='channel_id')
+    db_conn = db_connect()
+    chan_df = pd.read_sql_query("SELECT * FROM tk_channels ORDER BY CASE WHEN channel_id = 'None' THEN 1 ELSE 2 END, channel_id, freq_rx", con=db_conn, index_col='channel_id')
     channel_ids = chan_df.index.to_list()
+    db_conn.close()
 
     return channel_ids, chan_df
-
-
-def get_qt_freqs():
-    QT_df = pd.read_sql_query("SELECT * FROM qt_frequencies", con=pgconn)
-    QT_freqs = QT_df['qt_freq'].to_list()
-
-    return QT_freqs
 
 
 def get_empty_data_dict():
@@ -43,15 +38,13 @@ def kenwood_home():
     chan_ids, chan_df = get_chan_ids()
     chan_db = chan_df.to_json(orient="index")
 
-    qt_freqs = get_qt_freqs()
-
     data_dict = get_empty_data_dict()
     for chan in data_dict:
         data_dict[chan]['channel_id'] = 'None'
 
     data = json.dumps(data_dict)
 
-    return render_template('index.html', channel_ids=chan_ids, chan_db=chan_db, qt_freqs=qt_freqs, data_dict=data)
+    return render_template('index.html', channel_ids=chan_ids, chan_db=chan_db, qt_freqs=tkconst.QT_MASK, data_dict=data)
 
 
 @app.route('/send_channels', methods=['POST'])
@@ -64,13 +57,13 @@ def send_channels():
     chan_ids, chan_df = get_chan_ids()
     chan_db = chan_df.to_json(orient="index")
 
-    qt_freqs = get_qt_freqs()
-
     form_floats = ('freq_rx', 'freq_tx', 'qt_rx', 'qt_tx')
     form_ints = ('power', 'scan', 'width')
 
     data_dict = get_empty_data_dict()
     for ind, key in enumerate(data_dict):
+        if f'channel_id{ind + 1}' not in form_data:
+            form_data[f'channel_id{ind + 1}'] = " "
         for subkey in form_floats:
             try:
                 data_dict[ind + 1][subkey] = float(form_data['{}{}'.format(subkey, ind + 1)])
@@ -78,18 +71,15 @@ def send_channels():
                 data_dict[ind + 1][subkey] = 0.0
         for subkey in form_ints:
             data_dict[ind + 1][subkey] = int(form_data['{}{}'.format(subkey, ind + 1)])
-        data_dict[ind + 1]['channel_id'] = form_data['channel_id{}'.format(ind + 1)]
+        data_dict[ind + 1]['channel_id'] = form_data[f'channel_id{ind + 1}']
 
     trans = TKTranslate()
     channels_binary, channels_active = trans.dict_to_binary(data_dict)
-
     ki = TKComms()
-
     ki.tk_write(channels_active, channels_binary)
-
     data_dict = json.dumps(data_dict)
 
-    return render_template('index.html', channel_ids=chan_ids, chan_db=chan_db, qt_freqs=qt_freqs, data_dict=data_dict)
+    return render_template('index.html', channel_ids=chan_ids, chan_db=chan_db, qt_freqs=tkconst.QT_MASK, data_dict=data_dict)
 
 
 @app.route('/read_channels', methods=['POST'])
@@ -98,7 +88,6 @@ def read_channels():
 
     chan_ids, chan_df = get_chan_ids()
     chan_db = chan_df.to_json(orient="index")
-    qt_freqs = get_qt_freqs()
 
     form_data = request.form
     ki = TKComms()
@@ -113,23 +102,23 @@ def read_channels():
     merge_df = data_df.merge(chan_df[['channel_id', 'freq_rx', 'freq_tx', 'qt_rx', 'qt_tx', 'power', 'width']],
                              how='left', on=['freq_rx', 'freq_tx', 'qt_rx', 'qt_tx', 'power', 'width'])
     merge_df.index += 1
-    merge_df = merge_df.replace({pd.np.nan: None})
+    merge_df = merge_df.replace({np.nan: None})
     data_dict = merge_df.to_dict(orient='index')
-
     data_dict = json.dumps(data_dict)
 
-    return render_template('index.html', channel_ids=chan_ids, chan_db=chan_db, qt_freqs=qt_freqs, data_dict=data_dict)
+    return render_template('index.html', channel_ids=chan_ids, chan_db=chan_db, qt_freqs=tkconst.QT_MASK, data_dict=data_dict)
 
 
 @app.route('/add_channel', methods=['POST'])
 def add_channel():
     """add new channel to frequency database"""
     chan_data = request.form
+    db_conn = db_connect()
 
-    cur = pgconn.cursor()
+    cur = db_conn.cursor()
 
-    sql_str = """INSERT INTO tk_channels (description, channel_id, freq_tx, freq_Rx, qt_tx, qt_rx, power, scan, width)
-    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    sql_str = """INSERT INTO tk_channels (description, channel_id, freq_rx, freq_tx, qt_tx, qt_rx, power, scan, width)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"""
     sql_values = (
         chan_data['description'],
         chan_data['channel_id'],
@@ -143,10 +132,12 @@ def add_channel():
     )
     try:
         cur.execute(sql_str, sql_values)
-        pgconn.commit()
-    except pg.IntegrityError:
+        db_conn.commit()
+    except sqlite3.IntegrityError:
         return "Record Already Exists", 404
-
+    finally:
+        cur.close()
+        db_conn.close()
 
     return redirect('/')
 
@@ -154,8 +145,9 @@ def add_channel():
 def delete_channel():
     """delete channel from database"""
     chan_data = request.form
+    db_conn = db_connect()
 
-    cur = pgconn.cursor()
+    cur = db_conn.cursor()
 
     if chan_data['to_delete'] == 'None':
         return redirect('/')
@@ -165,10 +157,15 @@ def delete_channel():
                 WHERE channel_id = '{}'""".format(chan_data['to_delete'])
 
     cur.execute(sql_str)
-    pgconn.commit()
+    db_conn.commit()
+    cur.close()
+    db_conn.close()
 
     return redirect('/')
 
+def db_connect():
+    db_conn = sqlite3.connect("db/channels.db")
+    return db_conn
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5050)
