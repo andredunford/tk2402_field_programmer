@@ -95,7 +95,6 @@ class TKComms(object):
 
             data_in = self.ser.read(size=addr_len)
             data_in = np.array(list(data_in), dtype='uint8') ^ CRYPT2
-            print('channel data: ', data_in)
 
             self.write_conf(CRYPT2)
 
@@ -109,7 +108,6 @@ class TKComms(object):
         """vals: uint8 values to be summed with overflow"""
 
         checksum = np.sum(vals, dtype='uint8')
-        # print('sending checksum: ', checksum)
         self.ser.write((checksum ^ CRYPT2).tobytes())
         time.sleep(0.01)
         self.check_conf(CRYPT2)
@@ -168,7 +166,6 @@ class TKComms(object):
 
         #   send enumeration bytes
         self.ref_add_send(Y, 0x10, 0x00, 0x02)
-        # print('sending chanEnum: ', chanEnum)
         self.ser.write((chanEnum ^ CRYPT2).tobytes())
         self.checksum_send(chanEnum)
 
@@ -176,7 +173,6 @@ class TKComms(object):
 
         for i, x in enumerate(range(0x12C0, 0x14C0, 0x20)):
             self.ref_add_send(Y, (x >> 8), (x & 0xff), 0x20)
-            print(channel_data[i])
             self.ser.write((channel_data[i] ^ CRYPT2).tobytes())
             self.checksum_send(channel_data[i])
 
